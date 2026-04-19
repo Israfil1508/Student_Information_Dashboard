@@ -1205,7 +1205,7 @@ const frontendDistPath = join(__dirname, "../../frontend/dist");
 app.use(express.static(frontendDistPath, { maxAge: "1d" }));
 
 // SPA fallback: serve index.html for any unmatched routes
-app.get("*", (_request, response) => {
+app.use((_request, response) => {
   response.sendFile(join(frontendDistPath, "index.html"), (err) => {
     if (err) {
       response.status(404).json({ error: "Frontend not found. Build and deploy frontend first." });
