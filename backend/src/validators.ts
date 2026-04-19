@@ -1,3 +1,4 @@
+/* Initial Comment: Student Information Dashboard repository file. */
 import { z } from "zod";
 
 const GPA_MIN = 0;

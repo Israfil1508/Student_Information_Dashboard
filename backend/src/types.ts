@@ -1,3 +1,4 @@
+/* Initial Comment: Student Information Dashboard repository file. */
 export type AcademicYear = "Freshman" | "Sophomore" | "Junior" | "Senior";
 
 export type EnrollmentStatus =

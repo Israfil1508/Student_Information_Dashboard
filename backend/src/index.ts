@@ -1,3 +1,4 @@
+/* Initial Comment: Student Information Dashboard repository file. */
 import "dotenv/config";
 import cors from "cors";
 import express, { type NextFunction, type Request, type Response } from "express";
@@ -38,6 +39,18 @@ app.use(
   }),
 );
 app.use(express.json({ limit: "1mb" }));
+
+app.get("/", (_request, response) => {
+  sendSuccess(
+    response,
+    {
+      service: "Access to Education API",
+      health: "/api/health",
+      meta: "/api/meta",
+    },
+    "API is running. Use /api/* endpoints.",
+  );
+});
 
 const enrollmentTransitions: Record<EnrollmentStatus, EnrollmentStatus[]> = {
   "Full-time": ["Part-time", "Leave of Absence", "Graduated"],

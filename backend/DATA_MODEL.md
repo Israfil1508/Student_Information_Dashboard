@@ -1,3 +1,4 @@
+<!-- Initial Comment: Student Information Dashboard repository file. -->
 # Backend Data Model
 
 This document defines the core data model used by the backend API.
@@ -117,11 +118,11 @@ Cross-entity activity log:
 
 ## Persistence Shape
 
-The JSON database stores top-level collections:
+MongoDB stores a single app-state document with top-level arrays:
 - students
 - mentors
 - scholarships
 - meetings
 - auditLogs
 
-This is represented by the Database interface in source code.
+This app-state document is represented by the Database interface in source code.

@@ -1,9 +1,8 @@
+/* Initial Comment: Student Information Dashboard repository file. */
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
 import type { Server } from "node:http";
-import { initializeDatabase } from "../src/db.js";
+import { MongoMemoryServer } from "mongodb-memory-server";
+import { closeDatabaseConnection, initializeDatabase, writeDatabase } from "../src/db.js";
 import { buildSeedDatabase } from "../src/seedData.js";
 
 type ApiSuccess<T> = {
@@ -39,17 +38,16 @@ const baseStudentPayload = {
 };
 
 describe("API integration", () => {
-  let tempDir: string;
-  let dataFile: string;
+  let mongoServer: MongoMemoryServer;
   let server: Server;
   let baseUrl: string;
 
   beforeAll(async () => {
     process.env.NODE_ENV = "test";
-
-    tempDir = await mkdtemp(path.join(os.tmpdir(), "scholarship-mgmt-tests-"));
-    dataFile = path.join(tempDir, "db.json");
-    process.env.DATA_FILE = dataFile;
+    mongoServer = await MongoMemoryServer.create();
+    process.env.MONGODB_URI = mongoServer.getUri();
+    process.env.MONGODB_DB_NAME = "scholarship_management_test";
+    process.env.MONGODB_COLLECTION = "app_state";
 
     await initializeDatabase();
 
@@ -65,7 +63,7 @@ describe("API integration", () => {
   });
 
   beforeEach(async () => {
-    await writeFile(dataFile, JSON.stringify(buildSeedDatabase(), null, 2), "utf8");
+    await writeDatabase(buildSeedDatabase());
   });
 
   afterAll(async () => {
@@ -80,8 +78,11 @@ describe("API integration", () => {
       });
     });
 
-    await rm(tempDir, { recursive: true, force: true });
-    delete process.env.DATA_FILE;
+    await closeDatabaseConnection();
+    await mongoServer.stop();
+    delete process.env.MONGODB_URI;
+    delete process.env.MONGODB_DB_NAME;
+    delete process.env.MONGODB_COLLECTION;
   });
 
   it("returns healthy status", async () => {

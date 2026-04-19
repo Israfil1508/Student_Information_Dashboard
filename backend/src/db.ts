@@ -1,49 +1,104 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import path from "node:path";
+/* Initial Comment: Student Information Dashboard repository file. */
+import { MongoClient, type Db } from "mongodb";
 import { buildSeedDatabase } from "./seedData.js";
 import type { Database } from "./types.js";
 
-const defaultDataFile = path.resolve(process.cwd(), "data", "db.json");
+const DEFAULT_MONGODB_URI = "mongodb://127.0.0.1:27017";
+const DEFAULT_MONGODB_DB_NAME = "scholarship_management";
+const DEFAULT_MONGODB_COLLECTION = "app_state";
+const PRIMARY_DOCUMENT_ID = "primary";
 
-export const resolveDataFilePath = (): string => {
-  const envPath = process.env.DATA_FILE?.trim();
-  if (!envPath) {
-    return defaultDataFile;
-  }
-
-  if (path.isAbsolute(envPath)) {
-    return envPath;
-  }
-
-  return path.resolve(process.cwd(), envPath);
+type DatabaseDocument = Database & {
+  _id: string;
 };
 
-const ensureDataFile = async (filePath: string): Promise<void> => {
-  const directory = path.dirname(filePath);
-  await mkdir(directory, { recursive: true });
+let mongoClient: MongoClient | null = null;
+let mongoDatabase: Db | null = null;
 
-  try {
-    await readFile(filePath, "utf8");
-  } catch {
+export const resolveMongoUri = (): string => {
+  return process.env.MONGODB_URI?.trim() || DEFAULT_MONGODB_URI;
+};
+
+export const resolveMongoDatabaseName = (): string => {
+  return process.env.MONGODB_DB_NAME?.trim() || DEFAULT_MONGODB_DB_NAME;
+};
+
+export const resolveMongoCollectionName = (): string => {
+  return process.env.MONGODB_COLLECTION?.trim() || DEFAULT_MONGODB_COLLECTION;
+};
+
+const getClient = async (): Promise<MongoClient> => {
+  if (mongoClient) {
+    return mongoClient;
+  }
+
+  mongoClient = new MongoClient(resolveMongoUri());
+  await mongoClient.connect();
+
+  return mongoClient;
+};
+
+const getDatabase = async (): Promise<Db> => {
+  if (mongoDatabase) {
+    return mongoDatabase;
+  }
+
+  const client = await getClient();
+  mongoDatabase = client.db(resolveMongoDatabaseName());
+
+  return mongoDatabase;
+};
+
+const getCollection = async () => {
+  const database = await getDatabase();
+  return database.collection<DatabaseDocument>(resolveMongoCollectionName());
+};
+
+const ensureSeedDocument = async (): Promise<void> => {
+  const collection = await getCollection();
+  const existing = await collection.findOne({ _id: PRIMARY_DOCUMENT_ID });
+
+  if (!existing) {
     const seed = buildSeedDatabase();
-    await writeFile(filePath, JSON.stringify(seed, null, 2), "utf8");
+    await collection.insertOne({ _id: PRIMARY_DOCUMENT_ID, ...seed });
   }
 };
 
 export const initializeDatabase = async (): Promise<void> => {
-  const filePath = resolveDataFilePath();
-  await ensureDataFile(filePath);
+  await ensureSeedDocument();
 };
 
 export const readDatabase = async (): Promise<Database> => {
-  const filePath = resolveDataFilePath();
-  await ensureDataFile(filePath);
-  const raw = await readFile(filePath, "utf8");
-  return JSON.parse(raw) as Database;
+  await ensureSeedDocument();
+  const collection = await getCollection();
+
+  const document = await collection.findOne({ _id: PRIMARY_DOCUMENT_ID });
+
+  if (!document) {
+    throw new Error("Database seed document not found");
+  }
+
+  const { _id: _ignoredId, ...database } = document;
+  return database;
 };
 
 export const writeDatabase = async (database: Database): Promise<void> => {
-  const filePath = resolveDataFilePath();
-  await ensureDataFile(filePath);
-  await writeFile(filePath, JSON.stringify(database, null, 2), "utf8");
+  await ensureSeedDocument();
+  const collection = await getCollection();
+
+  await collection.updateOne(
+    { _id: PRIMARY_DOCUMENT_ID },
+    { $set: database },
+    { upsert: true },
+  );
+};
+
+export const closeDatabaseConnection = async (): Promise<void> => {
+  if (!mongoClient) {
+    return;
+  }
+
+  await mongoClient.close();
+  mongoClient = null;
+  mongoDatabase = null;
 };

@@ -1,3 +1,4 @@
+/* Initial Comment: Student Information Dashboard repository file. */
 import type { Response } from "express";
 
 interface ApiSuccessResponse<T> {

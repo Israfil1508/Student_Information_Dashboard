@@ -1,3 +1,4 @@
+<!-- Initial Comment: Student Information Dashboard repository file. -->
 # Backend - Student Information API
 
 Node.js + Express + TypeScript REST API for the Access to Education dashboard.
@@ -10,6 +11,7 @@ Node.js + Express + TypeScript REST API for the Access to Education dashboard.
 
 ```bash
 cp .env.example .env
+docker run --name scholarship-mongo -p 27017:27017 -d mongo:7
 npm install
 npm run seed
 npm run dev
@@ -41,12 +43,14 @@ Backend configuration environment variables:
 | --- | --- | --- | --- | --- |
 | `PORT` | No | `4000` | `4000` | API listen port. Most hosting platforms provide this automatically. |
 | `CORS_ORIGIN` | Yes (for deployment) | `http://localhost:5173` | `https://your-frontend-domain.com` | Allowed CORS origins. Provide comma-separated values for multiple frontend domains. |
-| `DATA_FILE` | No | `./data/db.json` | `/var/app/data/db.json` | JSON database file location. Relative paths are resolved from `backend/`. |
+| `MONGODB_URI` | No | `mongodb://127.0.0.1:27017` | `mongodb+srv://<user>:<password>@cluster0.mongodb.net` | MongoDB connection string. |
+| `MONGODB_DB_NAME` | No | `scholarship_management` | `scholarship_management_prod` | MongoDB database name. |
+| `MONGODB_COLLECTION` | No | `app_state` | `app_state` | Collection used to store the app state document. |
 
 Notes:
 
 - Keep `CORS_ORIGIN` aligned with the exact frontend origin (protocol + domain + port if used).
-- Ensure the directory for `DATA_FILE` is writable in your deployment environment.
+- Ensure the MongoDB user has read/write permissions for the configured database.
 - No additional backend-specific env vars are required by application code.
 
 ### backend/.env.example
@@ -54,7 +58,9 @@ Notes:
 ```env
 PORT=4000
 CORS_ORIGIN=http://localhost:5173
-DATA_FILE=./data/db.json
+MONGODB_URI=mongodb://127.0.0.1:27017
+MONGODB_DB_NAME=scholarship_management
+MONGODB_COLLECTION=app_state
 ```
 
 ## Data Model Coverage
@@ -107,4 +113,4 @@ Detailed model fields and relationships: see DATA_MODEL.md.
 
 ## One Improvement With More Time
 
-- Move persistence from JSON file to PostgreSQL with migrations and indexes.
+- Move persistence from a single MongoDB document to normalized collections with indexes.

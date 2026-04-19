@@ -1,3 +1,4 @@
+/* Initial Comment: Student Information Dashboard repository file. */
 import { describe, expect, it } from "vitest";
 import {
   scholarshipCreateSchema,
