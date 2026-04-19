@@ -1,3 +1,4 @@
+<!-- Initial Comment: Student Information Dashboard repository file. -->
 # AI_REVIEW.md
 
 ## 5) Self-Critique

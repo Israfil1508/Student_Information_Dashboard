@@ -1,3 +1,4 @@
+<!-- Initial Comment: Student Information Dashboard repository file. -->
 # PROMPTS.md
 
 This file captures the most useful AI prompts used during development, plus a refined reusable prompt for future iterations.

@@ -1,3 +1,4 @@
+<!-- Initial Comment: Student Information Dashboard repository file. -->
 # Access to Education - Student Information Dashboard
 
 Full-stack student information system built with React + TypeScript (frontend) and Node.js + Express + TypeScript (backend).
@@ -24,8 +25,8 @@ This project implements the four required modules:
 ## Tech Stack
 
 - Frontend: React 19, TypeScript, Vite, Axios, Recharts
-- Backend: Node.js, Express 5, TypeScript, Zod, JSON file persistence
-- Data: Seeded JSON database (`backend/data/db.json`)
+- Backend: Node.js, Express 5, TypeScript, Zod, MongoDB
+- Data: Seeded MongoDB app-state document
 
 ## Quick Start
 
@@ -34,6 +35,7 @@ This project implements the four required modules:
 ```bash
 cd backend
 cp .env.example .env
+docker run --name scholarship-mongo -p 27017:27017 -d mongo:7
 npm install
 npm run seed
 npm run dev
@@ -62,7 +64,9 @@ The application requires these environment variables for local and deployment co
 | --- | --- | --- | --- | --- |
 | `PORT` | No | `4000` | `4000` | Backend listen port. In many cloud providers this is injected automatically. |
 | `CORS_ORIGIN` | Yes (for deployment) | `http://localhost:5173` | `https://your-frontend-domain.com` | Allowed frontend origins. Use comma-separated values for multiple domains. |
-| `DATA_FILE` | No | `./data/db.json` | `/var/app/data/db.json` | Path to the JSON database file. Relative paths resolve from the backend working directory. |
+| `MONGODB_URI` | No | `mongodb://127.0.0.1:27017` | `mongodb+srv://<user>:<password>@cluster0.mongodb.net` | MongoDB connection string. |
+| `MONGODB_DB_NAME` | No | `scholarship_management` | `scholarship_management_prod` | MongoDB database name. |
+| `MONGODB_COLLECTION` | No | `app_state` | `app_state` | Collection used to store the app-state document. |
 
 ### frontend/.env
 
@@ -83,7 +87,9 @@ backend/.env.example
 ```env
 PORT=4000
 CORS_ORIGIN=http://localhost:5173
-DATA_FILE=./data/db.json
+MONGODB_URI=mongodb://127.0.0.1:27017
+MONGODB_DB_NAME=scholarship_management
+MONGODB_COLLECTION=app_state
 ```
 
 frontend/.env.example
@@ -122,7 +128,7 @@ AI-suggested decisions:
 - Start with Express + Vite split in `backend/` and `frontend/`
 - Use Zod schemas for API validation
 - Use Recharts for GPA trend visualization
-- Use a JSON database file for quick local demo setup
+- Use MongoDB for quick local demo setup with production-friendly persistence semantics
 
 Manual overrides I made:
 
@@ -137,7 +143,7 @@ Manual overrides I made:
 Recommended deployment:
 
 1. Deploy backend to Render/Railway/Fly.io.
-2. Set backend env vars (`PORT`, `CORS_ORIGIN`, `DATA_FILE`).
+2. Set backend env vars (`PORT`, `CORS_ORIGIN`, `MONGODB_URI`, `MONGODB_DB_NAME`, `MONGODB_COLLECTION`).
 3. Deploy frontend to Vercel/Netlify.
 4. Set `VITE_API_BASE_URL` in frontend environment.
 5. Replace live URL placeholders in this README.
