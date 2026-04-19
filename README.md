@@ -19,8 +19,6 @@ This project implements the four required modules:
 
 - `frontend/` - React TypeScript app (Vite)
 - `backend/` - Express TypeScript REST API
-- `PROMPTS.md` - AI interaction log
-- `AI_REVIEW.md` - AI self-critique and technical debt
 
 ## Tech Stack
 
@@ -63,8 +61,8 @@ The application requires these environment variables for local and deployment co
 | Variable | Required | Default | Example | Purpose |
 | --- | --- | --- | --- | --- |
 | `PORT` | No | `4000` | `4000` | Backend listen port. In many cloud providers this is injected automatically. |
-| `CORS_ORIGIN` | Yes (for deployment) | `http://localhost:5173` | `https://your-frontend-domain.com` | Allowed frontend origins. Use comma-separated values for multiple domains. |
-| `MONGODB_URI` | No | `mongodb://127.0.0.1:27017` | `mongodb+srv://<user>:<password>@cluster0.mongodb.net` | MongoDB connection string. |
+| `CORS_ORIGIN` | Yes (for deployment) | `http://localhost:5176 | `https://your-frontend-domain.com` | Allowed frontend origins. Use comma-separated values for multiple domains. |
+| `MONGODB_URL` | No | `mongodb+srv://israfil:1508@cluster0.mi7tvyl.mongodb.net/scholarship_management?retryWrites=true&w=majority&appName=Cluster0` | `mongodb+srv://israfil:1508@cluster0.mi7tvyl.mongodb.net/scholarship_management?retryWrites=true&w=majority&appName=Cluster0` | MongoDB connection string. |
 | `MONGODB_DB_NAME` | No | `scholarship_management` | `scholarship_management_prod` | MongoDB database name. |
 | `MONGODB_COLLECTION` | No | `app_state` | `app_state` | Collection used to store the app-state document. |
 
@@ -86,8 +84,8 @@ backend/.env.example
 
 ```env
 PORT=4000
-CORS_ORIGIN=http://localhost:5173
-MONGODB_URI=mongodb://127.0.0.1:27017
+CORS_ORIGIN=http://localhost:5176
+MONGODB_URL=mongodb+srv://israfil:1508@cluster0.mi7tvyl.mongodb.net/scholarship_management?retryWrites=true&w=majority&appName=Cluster0
 MONGODB_DB_NAME=scholarship_management
 MONGODB_COLLECTION=app_state
 ```
@@ -143,7 +141,7 @@ Manual overrides I made:
 Recommended deployment:
 
 1. Deploy backend to Render/Railway/Fly.io.
-2. Set backend env vars (`PORT`, `CORS_ORIGIN`, `MONGODB_URI`, `MONGODB_DB_NAME`, `MONGODB_COLLECTION`).
+2. Set backend env vars (`PORT`, `CORS_ORIGIN`, `MONGODB_URL`, `MONGODB_DB_NAME`, `MONGODB_COLLECTION`).
 3. Deploy frontend to Vercel/Netlify.
 4. Set `VITE_API_BASE_URL` in frontend environment.
 5. Replace live URL placeholders in this README.

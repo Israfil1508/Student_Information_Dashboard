@@ -1,6 +1,6 @@
 /* Initial Comment: Student Information Dashboard repository file. */
 import "dotenv/config";
-import { closeDatabaseConnection, initializeDatabase, writeDatabase } from "./db.js";
+import { closeDatabaseConnection, initializeDatabase, writeDatabase } from "./config/db.js";
 import { buildSeedDatabase } from "./seedData.js";
 
 const run = async (): Promise<void> => {

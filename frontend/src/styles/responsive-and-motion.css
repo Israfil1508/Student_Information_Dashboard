@@ -1,0 +1,104 @@
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 1220px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .directory-panel {
+    max-height: none;
+    min-height: 120vh;
+    overflow: visible;
+  }
+
+  .directory-list {
+    max-height: none;
+  }
+
+  .directory-list-zone {
+    max-height: 20vh;
+  }
+}
+
+@media (max-width: 900px) {
+  .tab-row {
+    grid-template-columns: 1fr;
+  }
+
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-header {
+    flex-direction: column;
+  }
+
+  .profile-header-main {
+    grid-template-columns: 1fr;
+  }
+
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .form-panel {
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .directory-mode-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .directory-mode-row .row-inline {
+    flex-wrap: wrap;
+  }
+
+  .directory-list-zone {
+    max-height: 20vh;
+  }
+
+  .timeline-item {
+    flex-direction: column;
+  }
+
+  .app-shell {
+    width: min(100%, 94vw);
+    padding-top: 14px;
+  }
+
+  .summary-detail-grid div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .summary-list.students-view .summary-entry .summary-list-button,
+  .summary-list.mentors-view .summary-entry .summary-list-button,
+  .summary-list.scholarships-view .summary-entry .summary-list-button,
+  .summary-list.meetings-view .summary-entry .summary-list-button {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .summary-list.students-view .summary-entry .summary-meta,
+  .summary-list.mentors-view .summary-entry .summary-meta,
+  .summary-list.scholarships-view .summary-entry .summary-meta,
+  .summary-list.meetings-view .summary-entry .summary-meta {
+    white-space: normal;
+  }
+
+  .summary-list {
+    max-height: 240px;
+  }
+}

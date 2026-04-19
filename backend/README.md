@@ -43,22 +43,24 @@ Backend configuration environment variables:
 | --- | --- | --- | --- | --- |
 | `PORT` | No | `4000` | `4000` | API listen port. Most hosting platforms provide this automatically. |
 | `CORS_ORIGIN` | Yes (for deployment) | `http://localhost:5173` | `https://your-frontend-domain.com` | Allowed CORS origins. Provide comma-separated values for multiple frontend domains. |
-| `MONGODB_URI` | No | `mongodb://127.0.0.1:27017` | `mongodb+srv://<user>:<password>@cluster0.mongodb.net` | MongoDB connection string. |
+| `MONGODB_URL` | No | `mongodb+srv://israfil:1508@cluster0.mi7tvyl.mongodb.net/scholarship_management?retryWrites=true&w=majority&appName=Cluster0` | `mongodb+srv://israfil:1508@cluster0.mi7tvyl.mongodb.net/scholarship_management?retryWrites=true&w=majority&appName=Cluster0` | MongoDB connection string. |
 | `MONGODB_DB_NAME` | No | `scholarship_management` | `scholarship_management_prod` | MongoDB database name. |
 | `MONGODB_COLLECTION` | No | `app_state` | `app_state` | Collection used to store the app state document. |
+| `MONGODB_SERVER_SELECTION_TIMEOUT_MS` | No | `10000` | `12000` | MongoDB server selection timeout in milliseconds before fallback/error. |
 
 Notes:
 
 - Keep `CORS_ORIGIN` aligned with the exact frontend origin (protocol + domain + port if used).
 - Ensure the MongoDB user has read/write permissions for the configured database.
+- If your environment blocks DNS SRV lookups, Atlas `mongodb+srv://` URIs can fail with `querySrv` errors. In that case, use Atlas standard `mongodb://` URI format or allow SRV DNS resolution on your network.
 - No additional backend-specific env vars are required by application code.
 
 ### backend/.env.example
 
 ```env
 PORT=4000
-CORS_ORIGIN=http://localhost:5173
-MONGODB_URI=mongodb://127.0.0.1:27017
+CORS_ORIGIN=http://localhost:5176
+MONGODB_URL=mongodb+srv://israfil:1508@cluster0.mi7tvyl.mongodb.net/scholarship_management?retryWrites=true&w=majority&appName=Cluster0
 MONGODB_DB_NAME=scholarship_management
 MONGODB_COLLECTION=app_state
 ```
