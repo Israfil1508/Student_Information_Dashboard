@@ -12,7 +12,7 @@ This project implements the four required modules:
 
 ## Live URLs
 
-- Frontend: `ADD_FRONTEND_URL_AFTER_DEPLOY`
+- Frontend: `[ADD_FRONTEND_URL_AFTER_DEPLOY](https://student-information-dashboard-u2c5.vercel.app/)`
 - API: `ADD_API_URL_AFTER_DEPLOY`
 
 ## Repository Structure
